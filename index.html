@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript">
+    // 바닐라 javascript를 통한 WebSocket 클라이언트 구현
+    window.addEventListener("load", function() {
+        // WebSocket 인스턴스 생성
+        var mySocket = new WebSocket("ws://localhost:8080/");
+
+        // 웹 소켓이 메시지를 받을 때 이벤트 처리
+        mySocket.onmessage = function (event) {
+            var output = document.getElementById("output");
+            // 받은 메시지를 화면에 텍스트로 표시
+            output.innerHTML += event.data + '<br />';
+        };
+        var form = document.getElementsByClassName("foo");
+        var input = document.getElementById("input");
+        form[0].addEventListener("submit", function (e) {
+            // 버튼이 눌려졌을 때 동작, 웹 소켓을 통해 서버로 메시지를 전달
+            input_text = input.value;
+            mySocket.send(input_text);
+            input.value = '';
+            e.preventDefault()
+        })
+    });
+</script>
+</head>
+<body>
+    <div>
+        <h1>Let's chat</h1>
+        <form class="foo">
+            <input id="input"></input>
+            <input type="submit" value="chat"></input>
+        </form>
+    </div>
+    <div>
+        <h1>Server says:</h1>
+        <div id="output"></div>
+    </div>
+</body>
+</html>
